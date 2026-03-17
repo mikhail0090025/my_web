@@ -1,0 +1,232 @@
+:root {
+  /* Цвета */
+  --primary-color: #106d2f;   /* заголовки */
+  --accent-color: #68f26d;    /* зеленые блоки */
+  --secondary-color: #ffffff; /* фон страницы */
+  --text-color: #333;
+
+  /* Шрифты */
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-heading: 'Arial Black', Gadget, sans-serif;
+
+  /* Размеры и анимации */
+  --max-width: 1200px;
+  --padding-section: 2rem;
+  --fade-duration: 0.7s;
+  --slide-distance: 40px;
+
+  /* Блоки проектов */
+  --project-title-height: 5rem; /* фиксированная высота заголовка */
+  --project-gif-height: 200px;  /* область для гифок */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+header, main, footer, section {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--padding-section);
+  opacity: 0;
+  transform: translateY(var(--slide-distance));
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* Видимые блоки */
+header.visible, main.visible, footer.visible, section.visible,
+#my-projects > div.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-color);
+}
+
+/* -------------------- */
+/* Блоки портфолио в ряд */
+#my-projects {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#my-projects > div {
+  flex: 1 1 calc(32% - 1rem); /* почти треть ширины */
+  background-color: var(--accent-color);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateY(var(--slide-distance));
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* Заголовок проекта с фиксированной высотой */
+#my-projects h3 {
+  height: var(--project-title-height);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+/* GIF область фиксированной высоты */
+#my-projects img {
+  flex-shrink: 0;
+  max-width: 100%;
+  height: var(--project-gif-height);
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Описание и детали всегда внизу */
+#my-projects .description {
+  margin-top: auto; /* отталкивает блок вниз */
+}
+
+/* -------------------- */
+/* Контакты и GitHub кнопка */
+#view-my-github a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+#view-my-github a:hover {
+  background-color: var(--accent-color);
+}
+
+footer ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+footer li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* -------------------- */
+/* Адаптивность */
+@media (max-width: 992px) {
+  #my-projects > div {
+    flex: 1 1 calc(48% - 1rem);
+  }
+}
+
+@media (max-width: 600px) {
+  #my-projects {
+    flex-direction: column;
+  }
+  #my-projects > div {
+    flex: 1 1 100%;
+  }
+}
+
+
+/* Убираем стандартный треугольник */
+details summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Контент скрыт по умолчанию */
+details > *:not(summary) {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s ease;
+}
+
+/* Когда открыт */
+details[open] > *:not(summary) {
+  max-height: 500px; /* достаточно большое значение */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+details summary::after {
+  content: "▼";
+  float: right;
+  transition: transform 0.3s ease;
+}
+
+details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+details ul li {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+/* При открытии — по очереди */
+details[open] ul li {
+  animation: fadeInItem 0.4s forwards;
+}
+
+details[open] ul li:nth-child(1) { animation-delay: 0.1s; }
+details[open] ul li:nth-child(2) { animation-delay: 0.2s; }
+details[open] ul li:nth-child(3) { animation-delay: 0.3s; }
+details[open] ul li:nth-child(4) { animation-delay: 0.4s; }
+details[open] ul li:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInItem {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
